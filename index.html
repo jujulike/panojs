@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>krpano</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="x-ua-compatible" content="IE=edge" />
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+	<style>
+		@-ms-viewport { width:device-width; }
+		@media only screen and (min-device-width:800px) { html { overflow:hidden; } }
+		html { height:100%; }
+		body { height:100%; overflow:hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#000000;overflow: hidden; }
+		.button-group{
+			position: absolute;
+			height:100%;
+			top:10px;
+			right:4px;
+			display: flex;
+			flex-direction: column;
+			overflow: auto;
+		}
+		button{
+			margin:8px 10px;
+		}
+	</style>
+</head>
+<body>
+
+<script src="tour.js"></script>
+
+<div id="pano" style="width:100%;height:100%;">
+	<noscript><table style="width:100%;height:100%;"><tr style="vertical-align:middle;text-align:center;"><td>ERROR:<br><br>Javascript not activated<br><br></td></tr></table></noscript>
+	<script>
+		embedpano({swf:"tour.swf", xml:"tour.xml", target:"pano", html5:"auto", mobilescale:1.0, passQueryParameters:true});
+	</script>
+</div>
+<div class="button-group">
+	<span style="color:#333;font-size:14px;margin: 4px 10px;">请打开调试面板F12，查看结果</span>
+	<span style="color:#333;font-size:14px;margin: 4px 10px;color:red;font-weight: bold">GET方法</span>
+	<button id="btn1" class="button">获取版本信息</button>
+	<button id="btn2" class="button">获取一个全局变量</button>
+	<button id="btn3" class="button">获取热点spot1参数</button>
+	<button id="btn4" class="button">获取layer1参数</button>
+	<span style="color:#333;font-size:14px;margin: 4px 10px;color:red;font-weight: bold">SET方法</span>
+	<button id="btn5" class="button">设置热点spot1</button>
+	<button id="btn6" class="button">设置热点layer1</button>
+	<button id="btn7" class="button">设置多个layer</button>
+	<button id="btn8" class="button">设置多个hotspot</button>
+	<span style="color:#333;font-size:14px;margin: 4px 10px;color:red;font-weight: bold">TWEEN方法</span>
+	<button id="btn9" class="button">layer动画</button>
+	<button id="btn10" class="button">hotspot动画</button>
+	<button id="btn11" class="button">多个layer动画</button>
+	<span style="color:#333;font-size:14px;margin: 4px 10px;color:red;font-weight: bold">创建/删除元素</span>
+	<button id="btn12" class="button">创建hotspot</button>
+	<button id="btn13" class="button">创建layer</button>
+	<button id="btn14" class="button">删除spot1</button>
+
+</div>
+
+</body>
+<script src="dist/pano.min.js"></script>
+<script>
+	var krpano = new Pano();
+	//获取版本信息
+	document.getElementById('btn1').addEventListener('click',function(){
+		var version = krpano.version();
+		console.log(version)
+	},false);
+
+	//获取一个参数
+	document.getElementById('btn2').addEventListener('click',function(){
+		var temp = krpano.get('view.fov');
+		console.log("get: fov:" + temp)
+	},false);
+	//获取hotspot参数
+	document.getElementById('btn3').addEventListener('click',function(){
+		var temp = krpano.gethotspot({
+			name:'spot1',
+			list:['name','scale']
+		})
+		console.log("gethotspot:");
+		console.log(temp)
+	},false);
+	//获取layer参数
+	document.getElementById('btn4').addEventListener('click',function(){
+		var temp = krpano.getlayer({
+			name:'layer1',
+			list:['name','width']
+		})
+		console.log("getlayer:");
+		console.log(temp);
+	},false);
+
+	//设置热点
+	document.getElementById('btn5').addEventListener('click',function(){
+		krpano.sethotspot({
+			name:'spot1',
+			list:{rotate:20,alpha:0.3}
+		});
+	},false);
+	//设置layer
+	document.getElementById('btn6').addEventListener('click',function(){
+		krpano.setlayer({
+			name:'layer1',
+			list:{bgcolor:'0xD224A7',width:100,height:100}
+		});
+	},false);
+	//设置多个layer
+	document.getElementById('btn7').addEventListener('click',function(){
+		krpano.setlayer({
+			name:['layer1','layer2'],
+			list:{bgcolor:'0xD224A7',width:100,height:100}
+		});
+	},false);
+	//设置多个hotspot
+	document.getElementById('btn8').addEventListener('click',function(){
+		krpano.sethotspot({
+			name:['spot1','spot2'],
+			list:{depth:1500,alpha:0.5}
+		});
+	},false);
+	//layer动画
+	document.getElementById('btn9').addEventListener('click',function(){
+		krpano.tweenlayer({
+			name:'layer1',
+			time:0.5,
+			varible:{width:300,height:100}
+		});
+	},false);
+	//hotspot动画
+	document.getElementById('btn10').addEventListener('click',function(){
+		krpano.tweenhotspot({
+			name:'spot1',
+			time:0.5,
+			varible:{scale:1.2,ty:200}
+		});
+	},false);
+	//多元素动画
+	document.getElementById('btn11').addEventListener('click',function(){
+		krpano.tweenlayer({
+			name:['layer1','layer2'],
+			time:0.5,
+			varible:{width:200,height:300}
+		});
+	},false);
+	//创建hotspot
+	document.getElementById('btn12').addEventListener('click',function(){
+		krpano.createhotspot({
+			name:'spot3',
+			list:{scale:0.5,style:'custom_style'}
+		});
+	},false);
+
+	//创建layer
+	document.getElementById('btn13').addEventListener('click',function(){
+		krpano.createlayer({
+			name:'layer3',
+			list:{width:200,height:200,keep:true,align:'lefttop',x:20,y:20,url:'skin/octocat.png'}
+		});
+	},false);
+
+	document.getElementById('btn14').addEventListener('click',function(){
+		krpano.removehotspot('spot1')
+	},false);
+</script>
+</html>

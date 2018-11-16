@@ -1,0 +1,82 @@
+﻿<krpano>
+	
+	<style name="custom_style" url="skin/vtourskin_hotspot.png" scale="0.5" distorted="true" onover="tween(scale,0.6)" onout="tween(scale,0.5)"  />
+
+	<layer name="layer1" keep='true' type="container" align="top" y="50" bgalpha="0.6" bgcolor="0x000000" width="150" height="150" >
+		<layer name="layer_text1" type="text" align="center" bgalpha="0" html="layer1" css="text-align:left; color:#FFFFFF; font-family:MicrosoftYahei; font-size:20px;" />
+	</layer>
+	<layer name="layer2" keep='true' type="container" align="top" x="100" y="260" bgalpha="0.6" bgcolor="0x1FDD0F" width="150" height="150" >
+		<layer name="layer_text2" type="text" align="center" bgalpha="0" html="layer2" css="text-align:left; color:#FFFFFF; font-family:MicrosoftYahei; font-size:20px;" />
+	</layer>
+	<!-- grid preview pano -->
+	<preview type="grid(cube,64,64,512,0xCCCCCC,0xF6F6F6,0x999999);" />
+
+	<!-- view/fov settings -->
+	<view hlookat="0" vlookat="0" fovtype="VFOV" fov="90" fovmin="30" fovmax="150" />
+
+	<hotspot name="spot1" style="custom_style" ath="-10.325" atv="8.214" text="spot1" onloaded="add_hotspot_text()" />
+	<hotspot name="spot2" style="custom_style" ath="25.664" atv="12.301" text="spot2" onloaded="add_hotspot_text()" />
+
+
+	<!--文字热点-->
+	<action name="add_hotspot_text">
+	
+	 txtadd(tooltipname, 'vrtooltip_', get(name));
+	 addhotspot(get(tooltipname)); 
+	 set(hotspot[get(tooltipname)].type,text);
+	 copy(hotspot[get(tooltipname)].edge,hotspot[get(name)].edge);
+	 copy(hotspot[get(tooltipname)].distorted,hotspot[get(name)].distorted);
+	 copy(hotspot[get(tooltipname)].ath,hotspot[get(name)].ath);
+	 copy(hotspot[get(tooltipname)].atv,hotspot[get(name)].atv);
+	 set(hotspot[get(tooltipname)].oy,-65);
+	 set(hotspot[get(tooltipname)].ox,0);
+	 set(hotspot[get(tooltipname)].vcenter,true);
+	 set(hotspot[get(tooltipname)].padding,10);
+	 set(hotspot[get(tooltipname)].bg,true);
+	 set(hotspot[get(tooltipname)].bgcolor,0x000000);
+	 set(hotspot[get(tooltipname)].bgroundedge,5);
+	 set(hotspot[get(tooltipname)].bgalpha,0.65);
+	 set(hotspot[get(tooltipname)].bgborder,0);
+	 set(hotspot[get(tooltipname)].bgshadow,'0 0 0 0x000000 0');
+	 set(hotspot[get(tooltipname)].css,'text-align:left; color:#FFFFFF; font-family:MicrosoftYahei; font-size:20px;');
+	 if(device.mobile,set(hotspot[get(tooltipname)].css,'text-align:center; color:#FFFFFF; font-family:MicrosoftYahei; font-weight:bold; font-size:20px;');
+	 );
+	 set(hotspot[get(tooltipname)].txtshadow,'0 0 0 0x000000 0');
+ 
+	 if(text == '' OR text === null,
+ 
+		 copy(hotspot[get(tooltipname)].html,scene[get(linkedscene)].title),
+		 copy(hotspot[get(tooltipname)].html,text);
+ 
+	 ); 
+ 
+	 set(hotspot[get(tooltipname)].enabled,false); 
+ 
+	 if(lp_running == false,
+	 	set(hotspot[get(tooltipname)].visible,true); 
+	 	, 	
+	 	if(!webvr.isenabled,
+	 	  if(lp_running == true,
+		 	set(hotspot[get(tooltipname)].visible,false); 
+		 	set(hotspot[get(tooltipname)].mark2,true);
+	 	   );
+	 	  );
+	 	);
+ 
+	 if(hotspot[get(name)].normal == false, 
+ 
+		set(hotspot[get(tooltipname)].normal,false);
+		set(hotspot[get(tooltipname)].onloaded,
+			if(webvr.isenabled,
+				set(visible,false);
+				,	
+				if(lp_running == false OR lp_running == null OR lp_running === null,  
+					set(visible,true);
+					);
+				);
+	       );
+ 
+	 	);
+</action>
+
+</krpano>
