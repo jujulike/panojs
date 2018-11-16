@@ -129,3 +129,7 @@ pano.js封装了**version、currentscene**工具函数，**get、gethotspot、ge
   ```
 
 
+
+[demo演示](https://cirolee.github.io/panojs/)    
+
+[github传送门](https://github.com/CiroLee/panojs)
