@@ -127,7 +127,10 @@
 		krpano.tweenlayer({
 			name:'layer1',
 			time:0.5,
-			varible:{width:300,height:100}
+			varible:{width:300,height:100},
+			callback:function(){
+				console.log(this)
+			}
 		});
 	},false);
 	//hotspot动画
@@ -135,15 +138,21 @@
 		krpano.tweenhotspot({
 			name:'spot1',
 			time:0.5,
-			varible:{scale:1.2,ty:200}
+			varible:{scale:1.2,ty:200},
+			callback:function(){
+				console.log(this)
+			}
 		});
 	},false);
-	//多元素动画
+	//多layer动画
 	document.getElementById('btn11').addEventListener('click',function(){
 		krpano.tweenlayer({
 			name:['layer1','layer2'],
 			time:0.5,
-			varible:{width:200,height:300}
+			varible:{width:200,height:300},
+			callback:function(){
+				console.log(this)
+			}
 		});
 	},false);
 	//创建hotspot

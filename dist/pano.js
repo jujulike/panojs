@@ -89,10 +89,10 @@ class Pano {
      * tweentype:动画类型，可选，默认default；
      * 
      */
-    tweenhotspot(obj = { time: 0.5, tweentype: 'easeOutInQuad' }) {
+    tweenhotspot(obj = { time: 0.5, tweentype: 'easeOutInQuad',callback:null }) {
         this._tweenAnimation(obj, 'hotspot');
     }
-    tweenlayer(obj = { time: 0.5, tweentype: 'easeOutInQuad' }) {
+    tweenlayer(obj = { time: 0.5, tweentype: 'easeOutInQuad',callback:null}) {
         this._tweenAnimation(obj, 'layer');
     }
     /**
@@ -171,16 +171,20 @@ class Pano {
         }
     }
     //私有函数，动画
-    _tweenAnimation(obj, type) {
+    _tweenAnimation(obj,type){
         let varible = obj.varible;
-        if (this._getType(obj.name) == 'string') {
-            for (let key in varible) {
-                let attr = `${type}[${obj.name}].${key}`;
-                let value = varible[key];
-                this.pano.call("tween(" + attr + "," + value + "," + obj.time + "," + obj.tweentype + ")");
-            }
 
-        } else if (this._getType(obj.name) == 'array') {
+        if(this._getType(obj.name) == 'string'){
+            let keyarry = Object.keys(varible),
+                valuearray = keyarry.map(element=>varible[element]),
+                value = valuearray.join('|');
+
+                keyarry = keyarry.map(element=>`${type}[${obj.name}].${element}`);
+                let attr = keyarry.join('|');
+
+            this.pano.call("tween(" + attr + "," + value + "," + obj.time + "," + obj.tweentype + ","+obj.callback()+")");
+        }
+        else if(this._getType(obj.name) == 'array'){
             for (let key in varible) {
                 obj.name.map(element => {
                     let attr = `${type}[${element}].${key}`;
@@ -188,7 +192,9 @@ class Pano {
                     this.pano.call("tween(" + attr + "," + value + "," + obj.time + "," + obj.tweentype + ")");
                 });
             }
-        };
+            if(obj.callback) setTimeout(obj.callback(),obj.time);
+            
+        }
     }
     /**
      * 工具私有函数集
@@ -221,6 +227,5 @@ class Pano {
         return true;
     }
 }
-
 
 export default Pano;

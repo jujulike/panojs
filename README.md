@@ -128,6 +128,14 @@ pano.js封装了**version、currentscene**工具函数，**get、gethotspot、ge
   krpano.loadscene('scene1');
   ```
 
+### update log        
+
+#####  2018-11-29        
+
+修复动画函数tweenhotspot、tweenlayer逻辑，支持回调函数callback。
+
+  
+
 
 
 [demo演示](https://cirolee.github.io/panojs/)    
